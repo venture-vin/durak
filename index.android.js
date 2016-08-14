@@ -9,25 +9,40 @@ import {
   AppRegistry,
   StyleSheet,
   Text,
-  View
+  View,
+  ListView,
+  TouchableHighlight,
+  Navigator
 } from 'react-native';
 
+
+import Tutorial from './tutorial'
+import Main from './main'
+
 class Durak extends Component {
+  renderScene(route, navigator) {
+    if (route.name === 'main') {
+      return <Main navigator={navigator} {...route.passProps} />
+    }
+    else if (route.name == 'tutorial'){
+      return <Tutorial navigator={navigator} {...route.passProps} />
+    }
+  }
+
+  navigate(routeName) {
+    this.props.navigator.push({
+      name: routeName
+      // passProps: {name: routeName},
+    })
+  }
+
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.android.js
-        </Text>
-        <Text style={styles.instructions}>
-          Double tap R on your keyboard to reload,{'\n'}
-          Shake or press menu button for dev menu
-        </Text>
-      </View>
-    );
+      <Navigator
+        style={{ flex:1 }}
+        initialRoute={{name:'main'}}
+        renderScene={this.renderScene.bind(this)} />
+    ); 
   }
 }
 
@@ -47,7 +62,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333333',
     marginBottom: 5,
-  },
+  }
 });
 
 AppRegistry.registerComponent('Durak', () => Durak);
